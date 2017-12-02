@@ -1,76 +1,99 @@
-create table customers (
-	customer_id number(10,0),
-    customer_first_name varchar2(30 byte),
-    customer_last_name varchar2(30 byte),
-    customer_username varchar2(25 byte) not null,
-	customer_password varchar2(100 byte) not null,
-	customer_street_address varchar2(200 byte),
-	customer_city varchar2(50 byte),
-	customer_state char(2),
-	customer_zip char(5),
-	primary key(customer_id)
+CREATE TABLE IF NOT EXISTS `Customer` (
+    `customer_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `first_name` VARCHAR(255),
+    `last_name` VARCHAR(255),
+    `customer_username` VARCHAR(255) UNIQUE,
+    `customer_password` VARCHAR(255),
+    `customer_address` VARCHAR(255),
+    PRIMARY KEY (`customer_id`)
 );
 
-create table vendors (
-	vendor_id number(10,0),
-	vendor_name varchar2(50 byte) not null,
-	vendor_url varchar2(100 byte),
-	primary key(vendor_id)
+CREATE TABLE IF NOT EXISTS `Vendors` (
+    `vendor_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `vendor_name` VARCHAR(255),
+    `vendor_url` VARCHAR(255),
+    PRIMARY KEY (`vendor_id`)
 );
 
-create table discounts (
-	discount_id number(10,0),
-	discount_percent_off number(3,2) not null,
-	discount_start_date date not null,
-	discount_end_date date not null,
-	discount_vendor number(10,0) not null,
-	primary key(discount_id),
-	foreign key(discount_vendor) references vendors
+CREATE TABLE IF NOT EXISTS `Discounts` (
+    `discount_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `percent_off` NUMERIC(9 , 2 ),
+    `start_date` DATE,
+    `end_date` DATE,
+    `vendor_id` INT(10),
+    PRIMARY KEY (`discount_id`),
+    FOREIGN KEY (vendor_id)
+        REFERENCES Vendors (vendor_id)
 );
 
-create table products (
-    product_id number(10,0),
-    product_name varchar2(100 byte) not null,
-    product_price number(9,2) not null,
-    product_brand varchar2(50 byte),
-	product_vendor number(10,0) not null,
-	product_discount number(10,0),
-    primary key(product_number),
-    foreign key(product_vendor) references vendors,
-	foreign key(product_discount) references discounts
+CREATE TABLE IF NOT EXISTS `Product` (
+    `product_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `product_name` VARCHAR(255),
+    `product_price` VARCHAR(255),
+    `vendor_id` INT(10),
+    `discount_id` INT(10),
+    PRIMARY KEY (`product_id`),
+    FOREIGN KEY (vendor_id)
+        REFERENCES Vendors (vendor_id),
+    FOREIGN KEY (discount_id)
+        REFERENCES Discounts (discount_id)
 );
 
-create table orders (
-	order_id number(10,0),
-	order_date_time date,
-	order_price number(9,2),
-	order_completed boolean not null,
-	order_customer number(10,0) not null,
-	primary key(order_id),
-	foreign key(order_customer) references customers
+CREATE TABLE IF NOT EXISTS `Orders` (
+    `order_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `order_num` INT(10) NOT NULL,
+    `order_date` DATE,
+    `order_time` TIME,
+    `order_completed` BOOLEAN,
+    `customer_id` INT(10),
+    `product_id` INT(10),
+    PRIMARY KEY (`order_id`),
+    FOREIGN KEY (customer_id)
+        REFERENCES Customer (customer_id),
+    FOREIGN KEY (product_id)
+        REFERENCES Product (product_id)
 );
 
-create table payment_accounts (
-	payment_account_id number(10,0),
-	payment_account_name varchar2(50),
-	payment_account_customer number(10,0),
-	primary key(payment_account_id),
-	foreign key(payment_account_customer) references customers
+CREATE TABLE IF NOT EXISTS `Payment` (
+    `account_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `account_name` VARCHAR(255),
+    `customer_id` INT(10),
+    PRIMARY KEY (`account_id`),
+    FOREIGN KEY (customer_id)
+        REFERENCES Customer (customer_id)
 );
 
-create table bank_accounts (
-	bank_account_id number(10,0),
-	bank_account_number varchar2(20 byte) not null,
-	bank_account_routing_number char(9) not null,
-	primary key(bank_account_id),
-	foreign key(bank_account_id) references payment_accounts
+CREATE TABLE IF NOT EXISTS `Bank` (
+    `bank_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `account_num` INT(10) UNIQUE,
+    `routing_num` INT(10),
+    `account_id` INT(10),
+    PRIMARY KEY (`bank_id`),
+    FOREIGN KEY (account_id)
+        REFERENCES Payment (account_id)
 );
 
-create table credit_cards (
-	credit_card_id number(10,0),
-	credit_card_number char(16) not null,
-	credit_card_expiration_date date not null,
-	credit_card_ccv varchar2(4 byte) not null,
-	primary key(credit_card_id),
-	foreign key(credit_card_id) references payment_accounts
-)
+CREATE TABLE IF NOT EXISTS `Card` (
+    `card_id` INT(10) NOT NULL AUTO_INCREMENT,
+    `card_num` INT(10) UNIQUE,
+    `expiration_date` INT(4),
+    `ccv` INT(3),
+    `account_id` INT(10),
+    PRIMARY KEY (`card_id`),
+    FOREIGN KEY (account_id)
+        REFERENCES Payment (account_id)
+);
+
+ALTER TABLE Payment
+ADD `bank_id` INT(10);
+
+ALTER TABLE Payment
+add `card_id` INT(10);
+
+ALTER TABLE Payment
+ADD CONSTRAINT foreign key (`bank_id`)
+references Bank(`bank_id`);
+
+ALTER TABLE Payment
+ADD CONSTRAINT foreign key (`card_id`)
+references Card(`card_id`);
