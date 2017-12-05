@@ -8,13 +8,14 @@ if(isset($_POST['submit'])){
     $user = mysqli_real_escape_string($conn, $_POST['username']);
     $pass = mysqli_real_escape_string($conn, $_POST['password']);
 
+
     //Check if inputs are empty
 
     if(empty($user) || empty($pass)){
         header("Location: ../index.php?login=empty");
         exit();
     }else {
-        $sql = "SELECT * FROM users WHERE username= '$user'";
+        $sql = "SELECT * FROM Customer WHERE customer_username= '$user'";
         $result = mysqli_query($conn, $sql);
         $resultChecker = mysqli_num_rows($result);
         if($resultChecker < 1){
@@ -32,8 +33,9 @@ if(isset($_POST['submit'])){
                 elseif($hashedpasschecker){
                     //login user
                     $_SESSION['user_id'] = $row['customer_id'];
-                    $_SESSION['user_first'] = $row['customer_first_name'];
-                    $_SESSION['user_last'] = $row['customer_last_name'];
+                    $testvar = $row['customer_id'];
+                    $_SESSION['user_first'] = $row['first_name'];
+                    $_SESSION['user_last'] = $row['last_name'];
                     $_SESSION['user_address'] = $row['customer_address'];
                     $_SESSION['user_username'] = $row['customer_username'];
                     header("Location: ../index.php?login=successful");
