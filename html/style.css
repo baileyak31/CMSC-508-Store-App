@@ -101,7 +101,7 @@ input, select {
     vertical-align:middle;
 }
 
-/* after reset */
+/* after reset ----------------------------------------------------------------*/
 
 .main-wrapper{
     margin: 0 auto;
@@ -203,7 +203,7 @@ header .nav-login a{
     text-align: center;
 }
 
-/*Signup.php*/
+/*Signup.php ----------------------------------------------------------------*/
 
 .signup-form {
     width: 400px;
@@ -241,8 +241,24 @@ header .nav-login a{
     background-color: #111;
 }
 
-/*Searchbar*/
+/*Searchbar ----------------------------------------------------------------*/
 .search-bar{
     text-align: center;
     padding-bottom: 5px;
+    font-size: 24px;
+}
+
+
+/*update.php ----------------------------------------------------------------*/
+.main-update-container{
+    margin: 0 auto;
+    width: 1000px;
+    padding-top: 40px;
+    text-align: center;
+    font-size: 40px;
+}
+.main-update-wrapper{
+    margin: 0 auto;
+    width: 1000px;
+    text-align: center;
 }

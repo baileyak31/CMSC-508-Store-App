@@ -20,7 +20,13 @@ session_start();
                     if(isset($_SESSION['user_id'])){
                       echo '<form action = "includes/logout.php" method= "POST">
                             <button type= "submit" name = "submit">Logout</button>
-                        </form>';
+                            </form>';
+                      echo '<form action = "update.php" method= "POST">
+                                <button type = "submit" name = "update" method="POST">Profile</button>
+                            </form>
+			                <form action = "cart.php" method= "POST">
+                                <button type = "submit" name = "cart" method="POST">Cart</button>
+                            </form>';
                     }
                     else{
                         echo '<form action="includes/login.php" method="POST">

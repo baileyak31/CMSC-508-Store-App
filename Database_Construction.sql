@@ -32,7 +32,10 @@ CREATE TABLE IF NOT EXISTS `Product` (
     `product_price` VARCHAR(255),
     `vendor_id` INT(10),
     `discount_id` INT(10),
+    `order_id` INT(10),
     PRIMARY KEY (`product_id`),
+    FOREIGN KEY (order_id)
+        REFERENCES Orders (order_id),
     FOREIGN KEY (vendor_id)
         REFERENCES Vendors (vendor_id),
     FOREIGN KEY (discount_id)
@@ -41,17 +44,12 @@ CREATE TABLE IF NOT EXISTS `Product` (
 
 CREATE TABLE IF NOT EXISTS `Orders` (
     `order_id` INT(10) NOT NULL AUTO_INCREMENT,
-    `order_num` INT(10) NOT NULL,
     `order_date` DATE,
     `order_time` TIME,
-    `order_completed` BOOLEAN,
     `customer_id` INT(10),
-    `product_id` INT(10),
     PRIMARY KEY (`order_id`),
     FOREIGN KEY (customer_id)
         REFERENCES Customer (customer_id),
-    FOREIGN KEY (product_id)
-        REFERENCES Product (product_id)
 );
 
 CREATE TABLE IF NOT EXISTS `Payment` (
@@ -77,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `Card` (
     `card_id` INT(10) NOT NULL AUTO_INCREMENT,
     `card_num` INT(10) UNIQUE,
     `expiration_date` INT(4),
-    `ccv` INT(3),
+    `cvv` INT(3),
     `account_id` INT(10),
     PRIMARY KEY (`card_id`),
     FOREIGN KEY (account_id)

@@ -15,20 +15,20 @@ if(isset($_POST['submit'])){
 
     if(empty($firstName) || empty($lastName) || empty($userName) || empty($password) || empty($address)){
 
-        header("Location: ../signup.php?signup=empty");
+        header("Location: ../empty.php");
         exit();
 
     } else {
         //Check for valid input characters
         if(!preg_match("/^[a-zA-Z]*$/",$firstName) || !preg_match("/^[a-zA-Z]*$/",$lastName)){
-            header("Location: ../signup.php?signup=invalid");
+            header("Location: ../invalidString.php");
             exit();
         } else {
-            $sql = "SELECT * FROM customer WHERE customer_username = '$userName'";
+            $sql = "SELECT * FROM Customer WHERE customer_username = '$userName'";
             $result = mysqli_query($conn, $sql);
             $resultChecker = mysqli_num_rows($result);
             if($resultChecker > 0){
-                header("Location: ../signup.php?signup=usertaken");
+                header("Location: ../takenUsername.php");
                 exit();
             }
             else{
@@ -37,7 +37,7 @@ if(isset($_POST['submit'])){
                 //Insert user into database
                 $sql = "INSERT INTO Customer (first_name, last_name, customer_username, customer_password, customer_address) VALUES ('$firstName', '$lastName', '$userName', '$hashedPass', '$address');";
                 mysqli_query($conn, $sql);
-                header("Location: ../signup.php?signup=sucess");
+                header("Location: ../success.php");
                 exit();
             }
         }
